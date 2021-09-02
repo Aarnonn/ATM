@@ -1,22 +1,44 @@
 import java.util.*;
+//Aaron's Code
 public class ATM {
 	
-	private ArrayList <HashMap<String, Integer>> list;
+	private HashMap<String, Double> list;
 	
-	public ATM (String ID) {
-		HashMap <String, Integer> bank = new HashMap<String, Integer> ();
-		bank.put(ID, 0);
-		list.add(bank);
+	public ATM() {
+		list = new HashMap<String, Double>();
 	}
 	
-	public void deposit (String ID, int amount){
-		for (int i = 0; i < list.size(); i++) {
-			HashMap <String, Integer> temp =  list.get(i);
-			if (temp.containsKey(ID)) {
-				temp.replace(ID, temp.get(ID), temp.get(ID)+amount);
-			}
+	public void deposit(String id, double amt) {
+		Double originalAmt = 0.0;
+		if (list.get(id) != null) {
+			originalAmt = list.get(id);
 		}
-		ATM newAccount = new ATM (ID);
-		newAccount.deposit(ID, amount);
+		list.put(id, amt+originalAmt);
 	}
+	
+	public void withdraw(String id, double amt) {
+		double accBalance = list.get(id);
+		if (amt>accBalance) {
+			System.out.println("Error! Not enough money in account!");
+			return;
+		}
+		list.put(id, accBalance-amt);
+	}
+	
+	public String checkBalance(String id) {
+		if (list.get(id) != null) {
+			String output = ("Account " + id + " has a remaining balance of " + list.get(id));
+			return output;
+		}
+		return "Error! Account does not exist.";
+	}
+
+	public String toString() {
+		String output = "";
+		for (Map.Entry<String, Double> entry : list.entrySet()) {
+			output += entry.getKey() + " " + entry.getValue() + "; ";
+		}
+		return output;
+	}
+	
 }
